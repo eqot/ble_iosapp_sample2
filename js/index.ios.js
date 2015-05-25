@@ -12,6 +12,10 @@ var {
   View,
 } = React;
 
+var BLE = require('./ble');
+this.ble = new BLE();
+this.ble.startScanning();
+
 var ble_iosapp_sample2 = React.createClass({
   render: function() {
     return (
