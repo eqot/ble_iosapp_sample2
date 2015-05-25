@@ -50,7 +50,7 @@ RCT_EXPORT_METHOD(startScanning)
     return;
   }
 
-  [self.bridge.eventDispatcher sendDeviceEventWithName:@"discoverPeripheral"
+  [self.bridge.eventDispatcher sendAppEventWithName:@"discoverPeripheral"
     body:@{
       @"name": peripheral.name,
       @"identifier": peripheral.identifier.UUIDString
