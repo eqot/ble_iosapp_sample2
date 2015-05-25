@@ -14,6 +14,11 @@ var {
 
 var BLE = require('./ble');
 this.ble = new BLE();
+
+this.ble.addListener('discover', (peripheral) => {
+  console.log(peripheral);
+});
+
 this.ble.startScanning();
 
 var ble_iosapp_sample2 = React.createClass({

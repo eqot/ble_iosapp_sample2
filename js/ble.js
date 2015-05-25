@@ -2,14 +2,14 @@
 
 var BLENative = require('NativeModules').BLENative;
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+var mixInEventEmitter = require('mixInEventEmitter');
 
 class BLE {
   constructor() {
     var subscription = RCTNativeAppEventEmitter.addListener(
       'discoverPeripheral',
       (peripheral) => {
-        console.log(peripheral.name);
-        console.log(peripheral.identifier);
+        this.emit('discover', peripheral);
       }
     );
   }
@@ -18,5 +18,7 @@ class BLE {
     BLENative.startScanning();
   }
 }
+
+mixInEventEmitter(BLE, {discover: true});
 
 module.exports = BLE;
