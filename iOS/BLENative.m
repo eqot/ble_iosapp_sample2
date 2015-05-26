@@ -57,4 +57,11 @@ RCT_EXPORT_METHOD(startScanning)
     }];
 }
 
+RCT_EXPORT_METHOD(stopScanning)
+{
+  [self.centralManager stopScan];
+
+  RCTLogInfo(@"Stop scanning.");
+}
+
 @end

@@ -17,6 +17,10 @@ class BLE {
   startScanning() {
     BLENative.startScanning();
   }
+
+  stopScanning() {
+    BLENative.stopScanning();
+  }
 }
 
 mixInEventEmitter(BLE, {discover: true});

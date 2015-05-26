@@ -20,6 +20,7 @@ this.ble.addListener('discover', (peripheral) => {
 });
 
 this.ble.startScanning();
+// this.ble.stopScanning();
 
 var ble_iosapp_sample2 = React.createClass({
   render: function() {
