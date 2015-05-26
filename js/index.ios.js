@@ -17,6 +17,12 @@ this.ble = new BLE();
 
 this.ble.addListener('discover', (peripheral) => {
   console.log(peripheral);
+
+  if (peripheral.name === 'ble_app_sample2') {
+    this.ble.connect(peripheral.name).then(() => {
+      console.log('Connected');
+    });
+  }
 });
 
 this.ble.startScanning();

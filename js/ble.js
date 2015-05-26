@@ -21,6 +21,19 @@ class BLE {
   stopScanning() {
     BLENative.stopScanning();
   }
+
+  connect(name: string): Promise {
+    return new Promise((resolve, reject) => {
+      BLENative.connect(name, function(error) {
+        if (error) {
+          console.log(error);
+          reject();
+        } else {
+          resolve();
+        }
+      })
+    });
+  }
 }
 
 mixInEventEmitter(BLE, {discover: true});
