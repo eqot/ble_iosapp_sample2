@@ -2,8 +2,8 @@
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
+  SwitchIOS,
   ListView,
   TouchableHighlight,
   Text,
@@ -37,16 +37,27 @@ var ConnectionTab = React.createClass({
   getInitialState() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
+      enable: true,
       dataSource: ds.cloneWithRows(this.peripherals),
     };
   },
 
   render: function() {
     return (
-      <ListView style={styles.list}
-        dataSource={this.state.dataSource}
-        renderRow={this.renderRow}
-      />
+      <View style={styles.tabContent}>
+        <View style={styles.row}>
+          <Text>Bluetooth Low Energy</Text>
+          <SwitchIOS
+            onValueChange={(value) => {
+              this.setState({enable: value});
+            }}
+            value={this.state.enable} />
+        </View>
+        <ListView style={styles.list}
+          dataSource={this.state.dataSource}
+          renderRow={this.renderRow}
+        />
+      </View>
     );
   },
 
@@ -67,21 +78,16 @@ var ConnectionTab = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
+  tabContent: {
+    paddingTop: 20,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'flex-start',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  row: {
+    flexDirection: 'row',
+    flex: 1,
+    paddingHorizontal: 14,
+    justifyContent: 'space-between',
   },
   list: {
     flex: 1,
