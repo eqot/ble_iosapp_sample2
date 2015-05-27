@@ -16,10 +16,10 @@ var ConnectionTab = React.createClass({
   statics: {
     title: 'Connection Tab',
     systemIcon: 'recents',
-    autoConnection: 'ble_app_sample2',
   },
 
   peripherals: [],
+  // autoConnection: 'ble_app_sample2',
 
   ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
 
@@ -49,6 +49,10 @@ var ConnectionTab = React.createClass({
 
     this.peripherals.push(peripheral.name);
     this.setState({dataSource: this.ds.cloneWithRows(this.peripherals)});
+
+    if (this.autoConnection && this.autoConnection === peripheral.name) {
+      this.connect(peripheral.name);
+    }
   },
 
   connect: function(name) {
