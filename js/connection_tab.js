@@ -52,7 +52,7 @@ var ConnectionTab = React.createClass({
   },
 
   connect: function(name) {
-    this.ble.connect(peripheral.name).then(() => {
+    this.ble.connect(name).then(() => {
       console.log('Connected');
     });
   },
