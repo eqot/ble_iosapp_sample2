@@ -19,7 +19,7 @@ var ConnectionTab = React.createClass({
   },
 
   peripherals: [],
-  // autoConnection: 'ble_app_sample2',
+  autoConnection: 'ble_app_sample2',
 
   ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
 
