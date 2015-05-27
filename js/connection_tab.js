@@ -4,6 +4,8 @@ var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
+  ListView,
+  TouchableHighlight,
   Text,
   View,
 } = React;
@@ -30,22 +32,38 @@ var ConnectionTab = React.createClass({
     systemIcon: 'recents',
   },
 
+  peripherals: [],
+
+  getInitialState() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+      dataSource: ds.cloneWithRows(this.peripherals),
+    };
+  },
+
   render: function() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+Control+Z for dev menu
-        </Text>
-      </View>
+      <ListView style={styles.list}
+        dataSource={this.state.dataSource}
+        renderRow={this.renderRow}
+      />
     );
-  }
+  },
+
+  renderRow: function(rowData: string, sectionID: number, rowID: number) {
+    return (
+      <TouchableHighlight onPress={() => this.onPressRow(rowID)}>
+        <View>
+          <View style={styles.listrow}>
+            <Text style={styles.text}>
+              {rowData}
+            </Text>
+          </View>
+          <View style={styles.separator} />
+        </View>
+      </TouchableHighlight>
+    );
+  },
 });
 
 var styles = StyleSheet.create({
@@ -64,6 +82,23 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  list: {
+    flex: 1,
+  },
+  listrow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#f6f6f6',
+  },
+  text: {
+    flex: 1,
+    paddingHorizontal: 14,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#cccccc',
   },
 });
 
