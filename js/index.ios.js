@@ -8,41 +8,49 @@ var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
-  Text,
-  View,
+  TabBarIOS,
 } = React;
 
-var BLE = require('./ble');
-this.ble = new BLE();
+var ConnectionTab = require('./connection_tab');
 
-this.ble.addListener('discover', (peripheral) => {
-  console.log(peripheral);
-
-  if (peripheral.name === 'ble_app_sample2') {
-    this.ble.connect(peripheral.name).then(() => {
-      console.log('Connected');
-    });
-  }
-});
-
-this.ble.startScanning();
-// this.ble.stopScanning();
+var tabs = [
+  {
+    component: ConnectionTab,
+    render: function() {
+      return (
+        <ConnectionTab />
+      )
+    }
+  },
+];
 
 var ble_iosapp_sample2 = React.createClass({
+  getInitialState: function() {
+    return {
+      selectedTab: tabs[0].component.title
+    };
+  },
+
   render: function() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <TabBarIOS style={styles.container}>
+        {tabs.map(function(tab, i) {
+          return (
+            <TabBarIOS.Item
+              title={tab.component.title}
+              systemIcon={tab.component.systemIcon}
+              selected={this.state.selectedTab === tab.component.title}
+              onPress={() => {
+                this.setState({
+                  selectedTab: tab.component.title,
+                });
+              }}
+              >
+              {tab.render()}
+            </TabBarIOS.Item>
+          );
+        }, this)}
+      </TabBarIOS>
     );
   }
 });
@@ -50,19 +58,7 @@ var ble_iosapp_sample2 = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    backgroundColor: '#fff',
   },
 });
 
