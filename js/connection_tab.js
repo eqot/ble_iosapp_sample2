@@ -55,6 +55,11 @@ var ConnectionTab = React.createClass({
     }
   },
 
+  onSelectPeripheral: function(rowID: number) {
+    this.stopScanning();
+    this.connect(this.peripherals[rowID]);
+  },
+
   connect: function(name) {
     this.ble.connect(name).then(() => {
       console.log('Connected');
@@ -82,7 +87,7 @@ var ConnectionTab = React.createClass({
 
   renderRow: function(rowData: string, sectionID: number, rowID: number) {
     return (
-      <TouchableHighlight onPress={() => this.onPressRow(rowID)}>
+      <TouchableHighlight onPress={() => this.onSelectPeripheral(rowID)}>
         <View>
           <View style={styles.listrow}>
             <Text style={styles.text}>
