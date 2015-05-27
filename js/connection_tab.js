@@ -11,35 +11,50 @@ var {
 } = React;
 
 var BLE = require('./ble');
-this.ble = new BLE();
-
-this.ble.addListener('discover', (peripheral) => {
-  console.log(peripheral);
-
-  if (peripheral.name === 'ble_app_sample2') {
-    this.ble.connect(peripheral.name).then(() => {
-      console.log('Connected');
-    });
-  }
-});
-
-this.ble.startScanning();
-// this.ble.stopScanning();
 
 var ConnectionTab = React.createClass({
   statics: {
     title: 'Connection Tab',
     systemIcon: 'recents',
+    autoConnection: 'ble_app_sample2',
   },
 
   peripherals: [],
 
+  ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+
   getInitialState() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       enable: true,
-      dataSource: ds.cloneWithRows(this.peripherals),
+      dataSource: this.ds.cloneWithRows(this.peripherals),
     };
+  },
+
+  componentDidMount: function() {
+    this.ble = new BLE();
+    this.ble.addListener('discover', this.onDiscoverPeripheral.bind(this));
+    this.startScanning();
+  },
+
+  startScanning() {
+    this.ble.startScanning();
+  },
+
+  stopScanning() {
+    this.ble.stopScanning();
+  },
+
+  onDiscoverPeripheral: function(peripheral) {
+    console.log(peripheral);
+
+    this.peripherals.push(peripheral.name);
+    this.setState({dataSource: this.ds.cloneWithRows(this.peripherals)});
+  },
+
+  connect: function(name) {
+    this.ble.connect(peripheral.name).then(() => {
+      console.log('Connected');
+    });
   },
 
   render: function() {
