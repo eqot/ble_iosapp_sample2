@@ -8,6 +8,7 @@
 
 @interface BLENative () <CBCentralManagerDelegate, CBPeripheralDelegate>
 @property (nonatomic, strong) CBCentralManager *centralManager;
+@property (nonatomic, strong) NSMutableArray *peripherals;
 @property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, strong) RCTResponseSenderBlock onConnectCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverServices;
@@ -21,6 +22,8 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(startScanning)
 {
+  self.peripherals = [NSMutableArray array];
+
   self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
 
   RCTLogInfo(@"Start scanning.");
@@ -46,7 +49,7 @@ RCT_EXPORT_METHOD(startScanning)
                    RSSI:(NSNumber *)RSSI
 {
   RCTLogInfo(@"peripheral:%@", peripheral);
-  self.peripheral = peripheral;
+  [self.peripherals addObject:peripheral];
 
   if (peripheral.name == nil) {
     return;
@@ -70,9 +73,24 @@ RCT_EXPORT_METHOD(connect:(NSString *)name callback:(RCTResponseSenderBlock)call
 {
   RCTLogInfo(@"Connecting to %@", name);
 
-  self.onConnectCallback = callback;
+  CBPeripheral *peripheral = [self findPeripheral:name];
+  if (peripheral == nil) {
+    return;
+  }
 
-  [self.centralManager connectPeripheral:self.peripheral options:nil];
+  self.onConnectCallback = callback;
+  [self.centralManager connectPeripheral:peripheral options:nil];
+}
+
+- (CBPeripheral *)findPeripheral:(NSString *)name
+{
+  for (CBPeripheral *peripheral in self.peripherals) {
+    if ([peripheral.name isEqualToString:name]) {
+      return peripheral;
+    }
+  }
+
+  return nil;
 }
 
 - (void) centralManager:(CBCentralManager *)central
