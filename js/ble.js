@@ -34,6 +34,14 @@ class BLE {
       })
     });
   }
+
+  discoverServices(): Promise {
+    return new Promise((resolve, reject) => {
+      BLENative.discoverServices(function(services) {
+        resolve(services);
+      })
+    });
+  }
 }
 
 mixInEventEmitter(BLE, {discover: true});

@@ -61,9 +61,11 @@ var ConnectionTab = React.createClass({
   },
 
   connect: function(name) {
-    this.ble.connect(name).then(() => {
-      console.log('Connected');
-    });
+    this.ble.connect(name)
+      .then(this.ble.discoverServices)
+      .then((services) => {
+        console.log(services);
+      });
   },
 
   render: function() {

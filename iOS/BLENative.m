@@ -10,6 +10,7 @@
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, strong) RCTResponseSenderBlock onConnectCallback;
+@property (nonatomic, strong) RCTResponseSenderBlock onDiscoverServices;
 @end
 
 @implementation BLENative
@@ -79,6 +80,8 @@ RCT_EXPORT_METHOD(connect:(NSString *)name callback:(RCTResponseSenderBlock)call
 {
   RCTLogInfo(@"Connected");
 
+  self.peripheral = peripheral;
+
   self.onConnectCallback(@[[NSNull null]]);
 }
 
@@ -87,6 +90,28 @@ RCT_EXPORT_METHOD(connect:(NSString *)name callback:(RCTResponseSenderBlock)call
   error:(NSError *)error
 {
   RCTLogInfo(@"Failed");
+}
+
+RCT_EXPORT_METHOD(discoverServices:(RCTResponseSenderBlock)callback)
+{
+  self.onDiscoverServices = callback;
+
+  self.peripheral.delegate = self;
+  [self.peripheral discoverServices:nil];
+}
+
+- (void)   peripheral:(CBPeripheral *)peripheral
+  didDiscoverServices:(NSError *)error
+{
+  NSArray *services = peripheral.services;
+  RCTLogInfo(@"%lu services: %@", (unsigned long)services.count, services);
+
+  NSMutableArray *uuids = [NSMutableArray array];
+  for (CBService *service in services) {
+    [uuids addObject:service.UUID.UUIDString];
+  }
+
+  self.onDiscoverServices(@[uuids]);
 }
 
 @end
