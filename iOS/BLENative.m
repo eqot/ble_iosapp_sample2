@@ -10,7 +10,7 @@
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) NSMutableArray *peripherals;
 @property (nonatomic, strong) NSArray *services;
-@property (nonatomic, strong) CBPeripheral *peripheral;
+@property (nonatomic, strong) CBPeripheral *connectedPeripheral;
 @property (nonatomic, strong) RCTResponseSenderBlock onConnectCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverServices;
 @end
@@ -104,7 +104,7 @@ RCT_EXPORT_METHOD(connect:(NSString *)name callback:(RCTResponseSenderBlock)call
 {
   RCTLogInfo(@"Connected");
 
-  self.peripheral = peripheral;
+  self.connectedPeripheral = peripheral;
 
   self.onConnectCallback(@[[NSNull null]]);
 }
@@ -120,8 +120,8 @@ RCT_EXPORT_METHOD(discoverServices:(RCTResponseSenderBlock)callback)
 {
   self.onDiscoverServices = callback;
 
-  self.peripheral.delegate = self;
-  [self.peripheral discoverServices:nil];
+  self.connectedPeripheral.delegate = self;
+  [self.connectedPeripheral discoverServices:nil];
 }
 
 - (void)   peripheral:(CBPeripheral *)peripheral
