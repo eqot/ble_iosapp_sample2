@@ -9,6 +9,7 @@
 @interface BLENative () <CBCentralManagerDelegate, CBPeripheralDelegate>
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) NSMutableArray *peripherals;
+@property (nonatomic, strong) NSArray *services;
 @property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, strong) RCTResponseSenderBlock onConnectCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverServices;
@@ -126,11 +127,11 @@ RCT_EXPORT_METHOD(discoverServices:(RCTResponseSenderBlock)callback)
 - (void)   peripheral:(CBPeripheral *)peripheral
   didDiscoverServices:(NSError *)error
 {
-  NSArray *services = peripheral.services;
-  RCTLogInfo(@"%lu services: %@", (unsigned long)services.count, services);
+  self.services = peripheral.services;
+  RCTLogInfo(@"%lu services: %@", (unsigned long)self.services.count, self.services);
 
   NSMutableArray *uuids = [NSMutableArray array];
-  for (CBService *service in services) {
+  for (CBService *service in self.services) {
     [uuids addObject:service.UUID.UUIDString];
   }
 
