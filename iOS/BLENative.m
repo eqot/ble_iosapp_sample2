@@ -49,11 +49,16 @@ RCT_EXPORT_METHOD(startScanning)
                    RSSI:(NSNumber *)RSSI
 {
   RCTLogInfo(@"peripheral:%@", peripheral);
-  [self.peripherals addObject:peripheral];
 
   if (peripheral.name == nil) {
     return;
   }
+
+  if ([self findPeripheral:peripheral.name] != nil) {
+    return;
+  }
+
+  [self.peripherals addObject:peripheral];
 
   [self.bridge.eventDispatcher sendAppEventWithName:@"discoverPeripheral"
     body:@{
