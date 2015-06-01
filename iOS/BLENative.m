@@ -225,6 +225,13 @@ RCT_EXPORT_METHOD(write:(NSString *)uuid value:(NSInteger)value callback:(RCTRes
     forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
 }
 
+- (void)               peripheral:(CBPeripheral *)peripheral
+  didWriteValueForCharacteristic:(CBCharacteristic *)characteristic
+                            error:(NSError *)error
+{
+  self.onWriteCharacteristic(@[[NSNull null]]);
+}
+
 - (CBCharacteristic *)findCharacteristic:(NSString *)uuid
 {
   for (CBCharacteristic *characteristic in self.characteristics) {
