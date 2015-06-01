@@ -26,6 +26,7 @@ var ConnectionTab = React.createClass({
   getInitialState() {
     return {
       enable: true,
+      timer: null,
       dataSource: this.ds.cloneWithRows(this.peripherals),
     };
   },
@@ -74,10 +75,29 @@ var ConnectionTab = React.createClass({
                   .then((value) => {
                     console.log(value);
                   });
+
+                this.startBlinking(characteristics[1]);
               });
           }
         }
       });
+  },
+
+  startBlinking: function(uuid: string) {
+    var value = 0;
+
+    this.timer = setInterval(() => {
+      this.ble.write(uuid, value);
+      value ^= 255;
+    }, 1000);
+  },
+
+  stopBlinking: function() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+
+    this.timer = null;
   },
 
   render: function() {

@@ -16,6 +16,7 @@
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverServices;
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverCharacteristics;
 @property (nonatomic, strong) RCTResponseSenderBlock onReadCharacteristic;
+@property (nonatomic, strong) RCTResponseSenderBlock onWriteCharacteristic;
 @end
 
 @implementation BLENative
@@ -206,6 +207,22 @@ RCT_EXPORT_METHOD(read:(NSString *)uuid callback:(RCTResponseSenderBlock)callbac
   [characteristic.value getBytes:&byte length:1];
 
   self.onReadCharacteristic(@[@(byte)]);
+}
+
+RCT_EXPORT_METHOD(write:(NSString *)uuid value:(NSInteger)value callback:(RCTResponseSenderBlock)callback)
+{
+  CBCharacteristic *characteristic = [self findCharacteristic:uuid];
+  if (characteristic == nil) {
+    return;
+  }
+
+  self.onWriteCharacteristic = callback;
+
+  unsigned char byte = value;
+  NSData *data = [[NSData alloc] initWithBytes:&byte length:1];
+
+  [self.connectedPeripheral writeValue:data
+    forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
 }
 
 - (CBCharacteristic *)findCharacteristic:(NSString *)uuid
