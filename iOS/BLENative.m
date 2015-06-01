@@ -15,6 +15,7 @@
 @property (nonatomic, strong) RCTResponseSenderBlock onConnectCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverServices;
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverCharacteristics;
+@property (nonatomic, strong) RCTResponseSenderBlock onReadCharacteristic;
 @end
 
 @implementation BLENative
@@ -179,6 +180,43 @@ RCT_EXPORT_METHOD(discoverCharacteristics:(NSString *)uuid callback:(RCTResponse
   }
 
   self.onDiscoverCharacteristics(@[uuids]);
+}
+
+RCT_EXPORT_METHOD(read:(NSString *)uuid callback:(RCTResponseSenderBlock)callback)
+{
+  CBCharacteristic *characteristic = [self findCharacteristic:uuid];
+  if (characteristic == nil) {
+    return;
+  }
+
+  self.onReadCharacteristic = callback;
+  [self.connectedPeripheral readValueForCharacteristic:characteristic];
+}
+
+- (void)               peripheral:(CBPeripheral *)peripheral
+  didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
+                            error:(NSError *)error
+{
+  if (characteristic.value == nil) {
+    self.onReadCharacteristic(@[@-1]);
+    return;
+  }
+
+  unsigned char byte;
+  [characteristic.value getBytes:&byte length:1];
+
+  self.onReadCharacteristic(@[@(byte)]);
+}
+
+- (CBCharacteristic *)findCharacteristic:(NSString *)uuid
+{
+  for (CBCharacteristic *characteristic in self.characteristics) {
+    if ([characteristic.UUID.UUIDString isEqualToString:uuid]) {
+      return characteristic;
+    }
+  }
+
+  return nil;
 }
 
 @end

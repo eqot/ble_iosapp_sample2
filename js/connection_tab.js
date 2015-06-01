@@ -69,6 +69,11 @@ var ConnectionTab = React.createClass({
             this.ble.discoverCharacteristics(services[i])
               .then((characteristics) => {
                 console.log(characteristics);
+
+                this.ble.read(characteristics[1])
+                  .then((value) => {
+                    console.log(value);
+                  });
               });
           }
         }

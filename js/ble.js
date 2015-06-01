@@ -50,6 +50,14 @@ class BLE {
       })
     });
   }
+
+  read(uuid: string): Promise {
+    return new Promise((resolve, reject) => {
+      BLENative.read(uuid, function(value) {
+        resolve(value);
+      })
+    });
+  }
 }
 
 mixInEventEmitter(BLE, {discover: true});
