@@ -64,7 +64,14 @@ var ConnectionTab = React.createClass({
     this.ble.connect(name)
       .then(this.ble.discoverServices)
       .then((services) => {
-        console.log(services);
+        for (var i = 0, l = services.length; i < l; i++) {
+          if (services[i] === '00000001-9F36-4229-A17C-E62208FC5A6D') {
+            this.ble.discoverCharacteristics(services[i])
+              .then((characteristics) => {
+                console.log(characteristics);
+              });
+          }
+        }
       });
   },
 

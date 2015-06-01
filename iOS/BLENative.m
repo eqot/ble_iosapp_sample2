@@ -10,9 +10,11 @@
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) NSMutableArray *peripherals;
 @property (nonatomic, strong) NSArray *services;
+@property (nonatomic, strong) NSArray *characteristics;
 @property (nonatomic, strong) CBPeripheral *connectedPeripheral;
 @property (nonatomic, strong) RCTResponseSenderBlock onConnectCallback;
 @property (nonatomic, strong) RCTResponseSenderBlock onDiscoverServices;
+@property (nonatomic, strong) RCTResponseSenderBlock onDiscoverCharacteristics;
 @end
 
 @implementation BLENative
@@ -136,6 +138,47 @@ RCT_EXPORT_METHOD(discoverServices:(RCTResponseSenderBlock)callback)
   }
 
   self.onDiscoverServices(@[uuids]);
+}
+
+RCT_EXPORT_METHOD(discoverCharacteristics:(NSString *)uuid callback:(RCTResponseSenderBlock)callback)
+{
+  RCTLogInfo(@"%@", uuid);
+
+  CBService *service = [self findService:uuid];
+  if (service == nil) {
+    return;
+  }
+
+  RCTLogInfo(@"%@", service);
+
+  self.onDiscoverCharacteristics = callback;
+  [self.connectedPeripheral discoverCharacteristics:nil forService:service];
+}
+
+- (CBService *)findService:(NSString *)uuid
+{
+  for (CBService *service in self.services) {
+    if ([service.UUID.UUIDString isEqualToString:uuid]) {
+      return service;
+    }
+  }
+
+  return nil;
+}
+
+- (void)                    peripheral:(CBPeripheral *)peripheral
+  didDiscoverCharacteristicsForService:(CBService *)service
+                                 error:(NSError *)error
+{
+  self.characteristics = service.characteristics;
+  RCTLogInfo(@"%lu characteristics: %@", (unsigned long)self.characteristics.count, self.characteristics);
+
+  NSMutableArray *uuids = [NSMutableArray array];
+  for (CBCharacteristic *characteristic in self.characteristics) {
+    [uuids addObject:characteristic.UUID.UUIDString];
+  }
+
+  self.onDiscoverCharacteristics(@[uuids]);
 }
 
 @end
