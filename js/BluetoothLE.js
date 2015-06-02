@@ -16,14 +16,9 @@ var BluetoothLE = React.createClass({
     };
   },
 
-  componentDidMount: function() {
-    console.log(this.props.peripheral);
-    console.log(this.props.service);
-    console.log(this.props.characteristic);
-
+  componentDidMount() {
     var subscription = RCTNativeAppEventEmitter.addListener(
       'discoverPeripheral', (peripheral) => {
-        console.log(peripheral);
         if (this.props.peripheral === peripheral.name) {
           this.connect(this.props.peripheral);
         }
@@ -33,31 +28,31 @@ var BluetoothLE = React.createClass({
     BLENative.startScanning();
   },
 
-  connect: function(name: string) {
+  connect(name: string) {
     BLENative.connect(name, () => {
       this.discoverServices();
     });
   },
 
-  discoverServices: function() {
+  discoverServices() {
     BLENative.discoverServices((services) => {
       this.discoverCharacteristics(this.props.service);
     });
   },
 
-  discoverCharacteristics: function(uuid: string) {
+  discoverCharacteristics(uuid: string) {
     BLENative.discoverCharacteristics(uuid, (characteristics) => {
       this.read(this.props.characteristic);
     });
   },
 
-  read: function(uuid: string) {
+  read(uuid: string) {
     BLENative.read(uuid, (value) => {
       this.setState({value: value});
     });
   },
 
-  write: function(uuid: string, value: integer) {
+  write(uuid: string, value: integer) {
     BLENative.write(uuid, value, () => {
     });
   },
