@@ -13,12 +13,20 @@ var {
 
 var ConnectionTab = require('./ConnectionTab');
 
+var DATA = {
+  ble: {
+    peripheral_name:     'ble_app_sample2',
+    service_uuid:        '00000001-9F36-4229-A17C-E62208FC5A6D',
+    characteristic_uuid: '00000002-9F36-4229-A17C-E62208FC5A6D',
+  },
+};
+
 var tabs = [
   {
     component: ConnectionTab,
     render: function() {
       return (
-        <ConnectionTab />
+        <ConnectionTab data={DATA}/>
       )
     }
   },

@@ -56,11 +56,7 @@ var ConnectionTab = React.createClass({
             }}
             value={this.state.enable} />
         </View>
-        <BluetoothLE
-          peripheral    ={'ble_app_sample2'}
-          service       ={'00000001-9F36-4229-A17C-E62208FC5A6D'}
-          characteristic={'00000002-9F36-4229-A17C-E62208FC5A6D'}
-          />
+        <BluetoothLE ble={this.props.data.ble} />
       </View>
     );
   },

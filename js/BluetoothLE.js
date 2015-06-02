@@ -23,8 +23,8 @@ var BluetoothLE = React.createClass({
   },
 
   onDiscoverPeripheral(peripheral) {
-    if (this.props.peripheral === peripheral.name) {
-      this.connect(this.props.peripheral);
+    if (this.props.ble.peripheral_name === peripheral.name) {
+      this.connect(this.props.ble.peripheral_name);
     }
   },
 
@@ -36,13 +36,13 @@ var BluetoothLE = React.createClass({
 
   discoverServices() {
     BLENative.discoverServices((services) => {
-      this.discoverCharacteristics(this.props.service);
+      this.discoverCharacteristics(this.props.ble.service_uuid);
     });
   },
 
   discoverCharacteristics(uuid: string) {
     BLENative.discoverCharacteristics(uuid, (characteristics) => {
-      this.read(this.props.characteristic);
+      this.read(this.props.ble.characteristic_uuid);
     });
   },
 
