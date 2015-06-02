@@ -29,6 +29,18 @@ var BluetoothLE = React.createClass({
 
   connect: function(name: string) {
     BLENative.connect(name, () => {
+      this.discoverServices();
+    });
+  },
+
+  discoverServices: function() {
+    BLENative.discoverServices((services) => {
+      this.discoverCharacteristics(this.props.service);
+    });
+  },
+
+  discoverCharacteristics: function(uuid: string) {
+    BLENative.discoverCharacteristics(uuid, (characteristics) => {
       console.log('ok');
     });
   },
