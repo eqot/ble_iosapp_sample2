@@ -17,15 +17,15 @@ var BluetoothLE = React.createClass({
   },
 
   componentDidMount() {
-    var subscription = RCTNativeAppEventEmitter.addListener(
-      'discoverPeripheral', (peripheral) => {
-        if (this.props.peripheral === peripheral.name) {
-          this.connect(this.props.peripheral);
-        }
-      }
-    );
+    RCTNativeAppEventEmitter.addListener('discoverPeripheral', this.onDiscoverPeripheral);
 
     BLENative.startScanning();
+  },
+
+  onDiscoverPeripheral(peripheral) {
+    if (this.props.peripheral === peripheral.name) {
+      this.connect(this.props.peripheral);
+    }
   },
 
   connect(name: string) {
