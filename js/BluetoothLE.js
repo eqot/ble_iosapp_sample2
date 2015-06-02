@@ -28,12 +28,7 @@ var BluetoothLE = React.createClass({
   },
 
   connect: function(name: string) {
-    BLENative.connect(name, (error) => {
-      if (error) {
-        console.log(error);
-        return;
-      }
-
+    BLENative.connect(name, () => {
       console.log('ok');
     });
   },
