@@ -11,7 +11,7 @@ var {
   TabBarIOS,
 } = React;
 
-var ConnectionTab = require('./connection_tab');
+var ConnectionTab = require('./ConnectionTab');
 
 var tabs = [
   {
