@@ -10,6 +10,12 @@ var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var BLENative = require('NativeModules').BLENative;
 
 var BluetoothLE = React.createClass({
+  getInitialState() {
+    return {
+      value: 0,
+    };
+  },
+
   componentDidMount: function() {
     console.log(this.props.peripheral);
     console.log(this.props.service);
@@ -41,13 +47,24 @@ var BluetoothLE = React.createClass({
 
   discoverCharacteristics: function(uuid: string) {
     BLENative.discoverCharacteristics(uuid, (characteristics) => {
-      console.log('ok');
+      this.read(this.props.characteristic);
+    });
+  },
+
+  read: function(uuid: string) {
+    BLENative.read(uuid, (value) => {
+      this.setState({value: value});
+    });
+  },
+
+  write: function(uuid: string, value: integer) {
+    BLENative.write(uuid, value, () => {
     });
   },
 
   render() {
     return (
-      <Text>BluetoothLE</Text>
+      <Text>BluetoothLE {this.state.value}</Text>
     );
   }
 });
