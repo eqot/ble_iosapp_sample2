@@ -49,6 +49,8 @@ var BluetoothLE = React.createClass({
   read(uuid: string) {
     BLENative.read(uuid, (value) => {
       this.setState({value: value});
+
+      this.props.onUpdate(value);
     });
   },
 
@@ -59,7 +61,7 @@ var BluetoothLE = React.createClass({
 
   render() {
     return (
-      <Text>BluetoothLE {this.state.value}</Text>
+      <Text>BluetoothLE {this.props.value}</Text>
     );
   }
 });

@@ -21,25 +21,32 @@ var DATA = {
   },
 };
 
-var tabs = [
-  {
-    component: ConnectionTab,
-    render: function() {
-      return (
-        <ConnectionTab data={DATA}/>
-      )
-    }
-  },
-];
-
 var ble_iosapp_sample2 = React.createClass({
   getInitialState: function() {
     return {
-      selectedTab: tabs[0].component.title
+      value: 0,
+      // selectedTab: this.tabs[0].component.title
+      selectedTabIndex: 0,
     };
   },
 
+  onUpdate: function(value: integer) {
+    this.setState({value: value});
+  },
+
   render: function() {
+    var self = this;
+    var tabs = [
+        {
+          component: ConnectionTab,
+          render: function() {
+            return (
+              <ConnectionTab data={DATA} onUpdate={self.onUpdate} value={self.state.value} />
+            )
+          }
+        },
+      ];
+
     return (
       <TabBarIOS style={styles.container}>
         {tabs.map(function(tab, i) {
@@ -47,7 +54,7 @@ var ble_iosapp_sample2 = React.createClass({
             <TabBarIOS.Item
               title={tab.component.title}
               systemIcon={tab.component.systemIcon}
-              selected={this.state.selectedTab === tab.component.title}
+              selected={this.state.selectedTabIndex === i}
               onPress={() => {
                 this.setState({
                   selectedTab: tab.component.title,
