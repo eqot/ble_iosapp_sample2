@@ -25,13 +25,16 @@ var ConnectionTab = React.createClass({
   getInitialState() {
     return {
       enable: true,
-      timer: null,
       led: false,
     };
   },
 
   componentDidMount: function() {
     this.startBlinking();
+  },
+
+  componentWillUnmount() {
+    this.stopBlinking();
   },
 
   startBlinking: function(uuid: string) {
