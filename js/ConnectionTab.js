@@ -29,7 +29,7 @@ var ConnectionTab = React.createClass({
     };
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this.startBlinking();
   },
 
@@ -37,13 +37,13 @@ var ConnectionTab = React.createClass({
     this.stopBlinking();
   },
 
-  startBlinking: function(uuid: string) {
+  startBlinking(uuid: string) {
     this.timer = this.setInterval(() => {
       this.setState({led: !this.state.led});
     }, 1000);
   },
 
-  stopBlinking: function() {
+  stopBlinking() {
     if (this.timer) {
       this.clearInterval(this.timer);
     }
@@ -51,7 +51,7 @@ var ConnectionTab = React.createClass({
     this.timer = null;
   },
 
-  render: function() {
+  render() {
     var led_state = this.state.led ? 'ON' : 'OFF';
     return (
       <View style={styles.tabContent}>

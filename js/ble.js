@@ -24,7 +24,7 @@ class BLE {
 
   connect(name: string): Promise {
     return new Promise((resolve, reject) => {
-      BLENative.connect(name, function(error) {
+      BLENative.connect(name, (error) => {
         if (error) {
           console.log(error);
           reject();
@@ -37,7 +37,7 @@ class BLE {
 
   discoverServices(): Promise {
     return new Promise((resolve, reject) => {
-      BLENative.discoverServices(function(services) {
+      BLENative.discoverServices((services) => {
         resolve(services);
       })
     });
@@ -45,7 +45,7 @@ class BLE {
 
   discoverCharacteristics(uuid: string): Promise {
     return new Promise((resolve, reject) => {
-      BLENative.discoverCharacteristics(uuid, function(characteristics) {
+      BLENative.discoverCharacteristics(uuid, (characteristics) => {
         resolve(characteristics);
       })
     });
@@ -53,7 +53,7 @@ class BLE {
 
   read(uuid: string): Promise {
     return new Promise((resolve, reject) => {
-      BLENative.read(uuid, function(value) {
+      BLENative.read(uuid, (value) => {
         resolve(value);
       })
     });
@@ -61,7 +61,7 @@ class BLE {
 
   write(uuid: string, value: integer): Promise {
     return new Promise((resolve, reject) => {
-      BLENative.write(uuid, value, function() {
+      BLENative.write(uuid, value, () => {
         resolve();
       })
     });

@@ -22,7 +22,7 @@ var DATA = {
 };
 
 var ble_iosapp_sample2 = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       value: 0,
       // selectedTab: this.tabs[0].component.title
@@ -30,16 +30,16 @@ var ble_iosapp_sample2 = React.createClass({
     };
   },
 
-  onUpdate: function(value: integer) {
+  onUpdate(value: integer) {
     this.setState({value: value});
   },
 
-  render: function() {
+  render() {
     var self = this;
     var tabs = [
         {
           component: ConnectionTab,
-          render: function() {
+          render() {
             return (
               <ConnectionTab data={DATA} onUpdate={self.onUpdate} value={self.state.value} />
             )
@@ -49,7 +49,7 @@ var ble_iosapp_sample2 = React.createClass({
 
     return (
       <TabBarIOS style={styles.container}>
-        {tabs.map(function(tab, i) {
+        {tabs.map((tab, i) => {
           return (
             <TabBarIOS.Item
               title={tab.component.title}
