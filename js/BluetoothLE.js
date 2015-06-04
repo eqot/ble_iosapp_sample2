@@ -22,6 +22,11 @@ var BluetoothLE = React.createClass({
     BLENative.startScanning();
   },
 
+  componentWillReceiveProps(props) {
+    var led_value = props.led ? 0 : 255;
+    this.write(props.ble.characteristic_uuid, led_value);
+  },
+
   onDiscoverPeripheral(peripheral) {
     if (this.props.ble.peripheral_name === peripheral.name) {
       this.connect(this.props.ble.peripheral_name);
@@ -60,9 +65,6 @@ var BluetoothLE = React.createClass({
   },
 
   render() {
-    var led_value = this.props.led ? 0 : 255;
-    this.write(this.props.ble.characteristic_uuid, led_value);
-
     var led_state = this.props.led ? 'ON' : 'OFF';
     return (
       <Text>BluetoothLE {this.props.value} {led_state}</Text>
