@@ -7,10 +7,13 @@ var {
   SwitchIOS,
   StyleSheet,
 } = React;
+var TimerMixin = require('react-timer-mixin');
 
 var BluetoothLE = require('./BluetoothLE');
 
 var ConnectionTab = React.createClass({
+  mixins: [TimerMixin],
+
   statics: {
     title: 'Connection Tab',
     systemIcon: 'recents',
@@ -23,29 +26,30 @@ var ConnectionTab = React.createClass({
     return {
       enable: true,
       timer: null,
+      led: false,
     };
   },
 
   componentDidMount: function() {
+    this.startBlinking();
   },
 
   startBlinking: function(uuid: string) {
-    var value = 0;
-
-    this.timer = setInterval(() => {
-      value ^= 255;
+    this.timer = this.setInterval(() => {
+      this.setState({led: !this.state.led});
     }, 1000);
   },
 
   stopBlinking: function() {
     if (this.timer) {
-      clearInterval(this.timer);
+      this.clearInterval(this.timer);
     }
 
     this.timer = null;
   },
 
   render: function() {
+    var led_state = this.state.led ? 'ON' : 'OFF';
     return (
       <View style={styles.tabContent}>
         <View style={styles.row}>
@@ -56,7 +60,13 @@ var ConnectionTab = React.createClass({
             }}
             value={this.state.enable} />
         </View>
-        <BluetoothLE ble={this.props.data.ble} value={this.props.value} onUpdate={this.props.onUpdate} />
+        <Text>LED {led_state}</Text>
+        <BluetoothLE
+          ble={this.props.data.ble}
+          value={this.props.value}
+          led={this.state.led}
+          onUpdate={this.props.onUpdate}
+        />
       </View>
     );
   },

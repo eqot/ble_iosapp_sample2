@@ -60,8 +60,9 @@ var BluetoothLE = React.createClass({
   },
 
   render() {
+    var led_state = this.props.led ? 'ON' : 'OFF';
     return (
-      <Text>BluetoothLE {this.props.value}</Text>
+      <Text>BluetoothLE {this.props.value} {led_state}</Text>
     );
   }
 });
