@@ -22,8 +22,8 @@ var BluetoothLE = React.createClass({
     BLENative.startScanning();
   },
 
-  componentWillReceiveProps(props) {
-    var led_value = props.led ? 0 : 255;
+  componentWillReceiveProps(nextProps) {
+    var led_value = nextProps.led ? 0 : 255;
     this.write(props.ble.characteristic_uuid, led_value);
   },
 
