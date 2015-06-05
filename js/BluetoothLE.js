@@ -24,7 +24,7 @@ var BluetoothLE = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     var led_value = nextProps.led ? 0 : 255;
-    this.write(props.ble.characteristic_uuid, led_value);
+    this.write(nextProps.ble.characteristic_uuid, led_value);
   },
 
   onDiscoverPeripheral(peripheral) {
