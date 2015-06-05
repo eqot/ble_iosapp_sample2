@@ -64,7 +64,7 @@ var ConnectionTab = React.createClass({
             value={this.state.enable} />
         </View>
         <BluetoothLE
-          ble={this.props.data.ble}
+          ble={this.props.ble}
           value={this.props.value}
           led={this.state.led}
           onUpdate={this.props.onUpdate}
