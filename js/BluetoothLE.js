@@ -10,6 +10,8 @@ var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var BLENative = require('NativeModules').BLENative;
 
 var BluetoothLE = React.createClass({
+  subscription: null,
+
   getInitialState() {
     return {
       value: 0,
@@ -17,9 +19,15 @@ var BluetoothLE = React.createClass({
   },
 
   componentDidMount() {
-    RCTNativeAppEventEmitter.addListener('discoverPeripheral', this.onDiscoverPeripheral);
+    this.subscription = RCTNativeAppEventEmitter.addListener('discoverPeripheral', this.onDiscoverPeripheral);
 
     BLENative.startScanning();
+  },
+
+  componentWillUnmount() {
+    this.subscription.remove();
+
+    BLENative.stopScanning();
   },
 
   componentWillReceiveProps(nextProps) {
