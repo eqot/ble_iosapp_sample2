@@ -22,7 +22,6 @@ var ble_iosapp_sample2 = React.createClass({
         characteristicUuid: '00000002-9F36-4229-A17C-E62208FC5A6D',
       },
       value: 0,
-      // selectedTab: this.tabs[0].component.title
       selectedTabIndex: 0,
     };
   },
