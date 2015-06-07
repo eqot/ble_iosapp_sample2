@@ -30,13 +30,9 @@ RCT_EXPORT_METHOD(startScanning)
   self.peripherals = [NSMutableArray array];
 
   self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-
-  RCTLogInfo(@"Start scanning.");
 }
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
-  RCTLogInfo(@"state:%ld", (long)central.state);
-
   switch (central.state) {
     case CBCentralManagerStatePoweredOn:
       [self.centralManager stopScan];
@@ -53,8 +49,6 @@ RCT_EXPORT_METHOD(startScanning)
       advertisementData:(NSDictionary *)advertisementData
                    RSSI:(NSNumber *)RSSI
 {
-  RCTLogInfo(@"peripheral:%@", peripheral);
-
   if (peripheral.name == nil) {
     return;
   }
@@ -62,6 +56,8 @@ RCT_EXPORT_METHOD(startScanning)
   if ([self findPeripheral:peripheral.name] != nil) {
     return;
   }
+
+  RCTLogInfo(@"peripheral:%@", peripheral);
 
   [self.peripherals addObject:peripheral];
 
@@ -75,14 +71,10 @@ RCT_EXPORT_METHOD(startScanning)
 RCT_EXPORT_METHOD(stopScanning)
 {
   [self.centralManager stopScan];
-
-  RCTLogInfo(@"Stop scanning.");
 }
 
 RCT_EXPORT_METHOD(connect:(NSString *)name callback:(RCTResponseSenderBlock)callback)
 {
-  RCTLogInfo(@"Connecting to %@", name);
-
   CBPeripheral *peripheral = [self findPeripheral:name];
   if (peripheral == nil) {
     return;
@@ -106,7 +98,7 @@ RCT_EXPORT_METHOD(connect:(NSString *)name callback:(RCTResponseSenderBlock)call
 - (void) centralManager:(CBCentralManager *)central
    didConnectPeripheral:(CBPeripheral *)peripheral
 {
-  RCTLogInfo(@"Connected");
+  RCTLogInfo(@"Connected to %@", peripheral.name);
 
   self.connectedPeripheral = peripheral;
 
@@ -144,14 +136,10 @@ RCT_EXPORT_METHOD(discoverServices:(RCTResponseSenderBlock)callback)
 
 RCT_EXPORT_METHOD(discoverCharacteristics:(NSString *)uuid callback:(RCTResponseSenderBlock)callback)
 {
-  RCTLogInfo(@"%@", uuid);
-
   CBService *service = [self findService:uuid];
   if (service == nil) {
     return;
   }
-
-  RCTLogInfo(@"%@", service);
 
   self.onDiscoverCharacteristics = callback;
   [self.connectedPeripheral discoverCharacteristics:nil forService:service];
