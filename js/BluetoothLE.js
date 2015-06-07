@@ -12,12 +12,6 @@ var BLENative = require('NativeModules').BLENative;
 var BluetoothLE = React.createClass({
   subscription: null,
 
-  getInitialState() {
-    return {
-      value: 0,
-    };
-  },
-
   componentDidMount() {
     this.subscription = RCTNativeAppEventEmitter.addListener('discoverPeripheral', this.onDiscoverPeripheral);
 
@@ -31,15 +25,15 @@ var BluetoothLE = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    var led_value = nextProps.led ? 0 : 255;
-    this.write(nextProps.ble.characteristic_uuid, led_value);
+    var writeValue = nextProps.writeValue ? 0 : 255;
+    this.write(nextProps.characteristicUuid, writeValue);
   },
 
   onDiscoverPeripheral(peripheral) {
-    if (this.props.ble.peripheral_name === peripheral.name) {
+    if (this.props.peripheralName === peripheral.name) {
       BLENative.stopScanning();
 
-      this.connect(this.props.ble.peripheral_name);
+      this.connect(this.props.peripheralName);
     }
   },
 
@@ -51,33 +45,28 @@ var BluetoothLE = React.createClass({
 
   discoverServices() {
     BLENative.discoverServices((services) => {
-      this.discoverCharacteristics(this.props.ble.service_uuid);
+      this.discoverCharacteristics(this.props.serviceUuid);
     });
   },
 
   discoverCharacteristics(uuid: string) {
     BLENative.discoverCharacteristics(uuid, (characteristics) => {
-      this.read(this.props.ble.characteristic_uuid);
+      this.read(this.props.characteristicUuid);
     });
   },
 
   read(uuid: string) {
-    BLENative.read(uuid, (value) => {
-      this.setState({value: value});
-
-      this.props.onUpdate(value);
-    });
+    BLENative.read(uuid, (value) => { this.props.onUpdate(value); });
   },
 
   write(uuid: string, value: integer) {
-    BLENative.write(uuid, value, () => {
-    });
+    BLENative.write(uuid, value, () => {});
   },
 
   render() {
-    var led_state = this.props.led ? 'ON' : 'OFF';
+    var writeValue = this.props.writeValue ? 'ON' : 'OFF';
     return (
-      <Text>BluetoothLE {this.props.value} {led_state}</Text>
+      <Text>BluetoothLE {this.props.readValue} {writeValue}</Text>
     );
   }
 });

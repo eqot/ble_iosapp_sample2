@@ -64,10 +64,12 @@ var ConnectionTab = React.createClass({
             value={this.state.enable} />
         </View>
         <BluetoothLE
-          ble={this.props.ble}
-          value={this.props.value}
-          led={this.state.led}
-          onUpdate={this.props.onUpdate}
+          peripheralName     = {this.props.ble.peripheralName}
+          serviceUuid        = {this.props.ble.serviceUuid}
+          characteristicUuid = {this.props.ble.characteristicUuid}
+          readValue          = {this.props.value}
+          writeValue         = {this.state.led}
+          onUpdate           = {this.props.onUpdate}
         />
       </View>
     );

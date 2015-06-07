@@ -17,9 +17,9 @@ var ble_iosapp_sample2 = React.createClass({
   getInitialState() {
     return {
       ble: {
-        peripheral_name:     'ble_app_sample2',
-        service_uuid:        '00000001-9F36-4229-A17C-E62208FC5A6D',
-        characteristic_uuid: '00000002-9F36-4229-A17C-E62208FC5A6D',
+        peripheralName:     'ble_app_sample2',
+        serviceUuid:        '00000001-9F36-4229-A17C-E62208FC5A6D',
+        characteristicUuid: '00000002-9F36-4229-A17C-E62208FC5A6D',
       },
       value: 0,
       // selectedTab: this.tabs[0].component.title
