@@ -57,6 +57,7 @@ var ble_iosapp_sample2 = React.createClass({
                   selectedTab: tab.component.title,
                 });
               }}
+              key={tab.component.title}
               >
               {tab.render()}
             </TabBarIOS.Item>
