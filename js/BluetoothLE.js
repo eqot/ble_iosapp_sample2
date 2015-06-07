@@ -37,6 +37,8 @@ var BluetoothLE = React.createClass({
 
   onDiscoverPeripheral(peripheral) {
     if (this.props.ble.peripheral_name === peripheral.name) {
+      BLENative.stopScanning();
+
       this.connect(this.props.ble.peripheral_name);
     }
   },
