@@ -12,6 +12,7 @@ var {
 } = React;
 
 var ConnectionTab = require('./ConnectionTab');
+var SettingTab    = require('./SettingTab');
 
 var ble_iosapp_sample2 = React.createClass({
   getInitialState() {
@@ -33,6 +34,14 @@ var ble_iosapp_sample2 = React.createClass({
   render() {
     var self = this;
     var tabs = [
+        {
+          component: SettingTab,
+          render() {
+            return (
+              <SettingTab ble={self.state.ble} />
+            )
+          }
+        },
         {
           component: ConnectionTab,
           render() {
