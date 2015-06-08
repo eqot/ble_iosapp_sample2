@@ -4,6 +4,7 @@ var React = require('react-native');
 var {
   View,
   Text,
+  TouchableHighlight,
   ListView,
   NavigatorIOS,
   StyleSheet,
@@ -37,18 +38,30 @@ var SettingView = React.createClass({
     };
   },
 
+  pressRow(id) {
+    console.log(id);
+  },
+
   render() {
     return (
       <View style={styles.container}>
         <ListView style={styles.listView}
           dataSource={this.state.dataSource}
-          renderRow={
-            (rowData) => <Text>{rowData.name}</Text>
-          }
+          renderRow={this.renderRow}
         />
       </View>
     );
+  },
 
+  renderRow(rowData, sectionId: number, rowId: number) {
+    return (
+      <TouchableHighlight onPress={() => this.pressRow(rowId)} >
+        <View style={styles.row}>
+          <Text>{rowData.name}</Text>
+          <Text style={styles.arrow}> > </Text>
+        </View>
+      </TouchableHighlight>
+    );
   }
 });
 
@@ -59,6 +72,15 @@ var styles = StyleSheet.create({
   listView: {
     flex: 1,
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderBottomWidth: 0.2,
+  },
+  arrow: {
+    color: 'gray',
+  }
 });
 
 module.exports = SettingsTab;
