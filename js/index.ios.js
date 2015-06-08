@@ -12,7 +12,7 @@ var {
 } = React;
 
 var ConnectionTab = require('./ConnectionTab');
-var SettingTab    = require('./SettingTab');
+var SettingsTab    = require('./SettingsTab');
 
 var ble_iosapp_sample2 = React.createClass({
   getInitialState() {
@@ -24,7 +24,7 @@ var ble_iosapp_sample2 = React.createClass({
       },
       value: 0,
       selectedTabIndex: 0,
-      setting: [
+      settings: [
         {
           name: 'Incoming call',
           enabled: true,
@@ -58,10 +58,10 @@ var ble_iosapp_sample2 = React.createClass({
     var self = this;
     var tabs = [
         {
-          component: SettingTab,
+          component: SettingsTab,
           render() {
             return (
-              <SettingTab ble={self.state.ble} setting={self.state.setting} />
+              <SettingsTab ble={self.state.ble} settings={self.state.settings} />
             )
           }
         },

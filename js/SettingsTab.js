@@ -9,9 +9,9 @@ var {
   StyleSheet,
 } = React;
 
-var SettingTab = React.createClass({
+var SettingsTab = React.createClass({
   statics: {
-    title: 'Setting',
+    title: 'Settings',
     systemIcon: 'featured',
   },
 
@@ -21,8 +21,8 @@ var SettingTab = React.createClass({
         style={styles.container}
         initialRoute={{
           component: SettingView,
-          title: 'Setting',
-          passProps: { setting: this.props.setting },
+          title: 'Settings',
+          passProps: { settings: this.props.settings },
         }}
       />
     );
@@ -33,7 +33,7 @@ var SettingView = React.createClass({
   getInitialState() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      dataSource: ds.cloneWithRows(this.props.setting),
+      dataSource: ds.cloneWithRows(this.props.settings),
     };
   },
 
@@ -61,4 +61,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = SettingTab;
+module.exports = SettingsTab;
