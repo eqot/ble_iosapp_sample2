@@ -24,6 +24,29 @@ var ble_iosapp_sample2 = React.createClass({
       },
       value: 0,
       selectedTabIndex: 0,
+      setting: [
+        {
+          name: 'Incoming call',
+          enabled: true,
+          color: '#ff0000',
+          pattern: 'standard',
+          vibrator: true,
+        },
+        {
+          name: 'Mail',
+          enabled: true,
+          color: '#00ff00',
+          pattern: 'standard',
+          vibrator: true,
+        },
+        {
+          name: 'SNS',
+          enabled: false,
+          color: '#0000ff',
+          pattern: 'standard',
+          vibrator: false,
+        },
+      ]
     };
   },
 
@@ -38,7 +61,7 @@ var ble_iosapp_sample2 = React.createClass({
           component: SettingTab,
           render() {
             return (
-              <SettingTab ble={self.state.ble} />
+              <SettingTab ble={self.state.ble} setting={self.state.setting} />
             )
           }
         },
