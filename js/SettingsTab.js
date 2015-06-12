@@ -77,6 +77,10 @@ var SettingDetailView = React.createClass({
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var params = [
       {
+        name: 'Enabled',
+        items: true,
+      },
+      {
         name: 'Color',
         items: ['#0000ff', '#00ff00', '#ff0000'],
       },
@@ -111,7 +115,7 @@ var SettingDetailView = React.createClass({
     if (Array.isArray(rowData.items)) {
       item = <Text>aaa</Text>
     } else if (typeof(rowData.items) === 'boolean') {
-      item = <SwitchIOS />
+      item = <SwitchIOS value={this.props.settings[rowData.name.toLowerCase()]} />
     }
     return (
       <View style={styles.row}>

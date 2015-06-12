@@ -37,7 +37,7 @@ var ble_iosapp_sample2 = React.createClass({
           enabled: true,
           color: '#00ff00',
           pattern: 'standard',
-          vibrator: true,
+          vibrator: false,
         },
         {
           name: 'SNS',
