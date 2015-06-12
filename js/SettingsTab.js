@@ -39,7 +39,13 @@ var SettingView = React.createClass({
   },
 
   pressRow(id) {
-    console.log(id);
+    this.props.navigator.push({
+      component: SettingView,
+      title: this.props.settings[id].name,
+      passProps: {
+        settings: this.props.settings
+      },
+    });
   },
 
   render() {
