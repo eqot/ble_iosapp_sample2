@@ -72,31 +72,41 @@ var SettingView = React.createClass({
   }
 });
 
+var params = [
+  {
+    name: 'Enabled',
+    items: true,
+  },
+  {
+    name: 'Color',
+    items: ['#0000ff', '#00ff00', '#ff0000'],
+  },
+  {
+    name: 'Pattern',
+    items: ['Standard', 'Quick', 'Slow'],
+  },
+  {
+    name: 'Vibrator',
+    items: true,
+  },
+];
+
 var SettingDetailView = React.createClass({
   getInitialState() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var params = [
-      {
-        name: 'Enabled',
-        items: true,
-      },
-      {
-        name: 'Color',
-        items: ['#0000ff', '#00ff00', '#ff0000'],
-      },
-      {
-        name: 'Pattern',
-        items: ['Standard', 'Quick', 'Slow'],
-      },
-      {
-        name: 'Vibrator',
-        items: true,
-      },
-    ];
-
     return {
       dataSource: ds.cloneWithRows(params),
     };
+  },
+
+  pressRow(id) {
+    this.props.navigator.push({
+      component: SettingItemView,
+      title: params[id].name,
+      passProps: {
+        params: params[id].items
+      },
+    });
   },
 
   render() {
@@ -113,7 +123,14 @@ var SettingDetailView = React.createClass({
   renderRow(rowData, sectionId: number, rowId: number) {
     var item = null;
     if (Array.isArray(rowData.items)) {
-      item = <Text>aaa</Text>
+      return (
+        <TouchableHighlight onPress={() => this.pressRow(rowId)} >
+          <View style={styles.row}>
+            <Text>{rowData.name}</Text>
+            <Text style={styles.arrow}> > </Text>
+          </View>
+        </TouchableHighlight>
+      );
     } else if (typeof(rowData.items) === 'boolean') {
       item = <SwitchIOS value={this.props.settings[rowData.name.toLowerCase()]} />
     }
@@ -124,6 +141,38 @@ var SettingDetailView = React.createClass({
       </View>
     );
   }
+});
+
+var SettingItemView = React.createClass({
+  getInitialState() {
+    console.log(this.props.params);
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+      dataSource: ds.cloneWithRows(this.props.params),
+    };
+  },
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <ListView style={styles.listView}
+          dataSource={this.state.dataSource}
+          renderRow={this.renderRow}
+        />
+      </View>
+    );
+  },
+
+  renderRow(rowData, sectionId: number, rowId: number) {
+    return (
+      <TouchableHighlight onPress={() => this.pressRow(rowId)} >
+        <View style={styles.row}>
+          <Text>{rowData}</Text>
+          <Text style={styles.arrow}> > </Text>
+        </View>
+      </TouchableHighlight>
+    );
+  },
 });
 
 var styles = StyleSheet.create({
