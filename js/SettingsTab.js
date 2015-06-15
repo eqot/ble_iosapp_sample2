@@ -11,6 +11,25 @@ var {
   StyleSheet,
 } = React;
 
+var SettingParams = [
+  {
+    name: 'Enabled',
+    items: true,
+  },
+  {
+    name: 'Color',
+    items: ['#0000ff', '#00ff00', '#ff0000'],
+  },
+  {
+    name: 'Pattern',
+    items: ['Standard', 'Quick', 'Slow'],
+  },
+  {
+    name: 'Vibrator',
+    items: true,
+  },
+];
+
 var SettingsTab = React.createClass({
   statics: {
     title: 'Settings',
@@ -72,39 +91,20 @@ var SettingView = React.createClass({
   }
 });
 
-var params = [
-  {
-    name: 'Enabled',
-    items: true,
-  },
-  {
-    name: 'Color',
-    items: ['#0000ff', '#00ff00', '#ff0000'],
-  },
-  {
-    name: 'Pattern',
-    items: ['Standard', 'Quick', 'Slow'],
-  },
-  {
-    name: 'Vibrator',
-    items: true,
-  },
-];
-
 var SettingDetailView = React.createClass({
   getInitialState() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      dataSource: ds.cloneWithRows(params),
+      dataSource: ds.cloneWithRows(SettingParams),
     };
   },
 
   pressRow(id) {
     this.props.navigator.push({
       component: SettingItemView,
-      title: params[id].name,
+      title: SettingParams[id].name,
       passProps: {
-        params: params[id].items
+        params: SettingParams[id].items
       },
     });
   },
